@@ -1,0 +1,97 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        #wynik {float:left ;display:"inline"}
+    </style>
+    <script>
+        var wybor = 0;
+        function dodaj()
+        {
+            let liczba1 = document.getElementById("liczba1").value;
+            liczba1 = parseFloat(liczba1);
+            let liczba2 = document.getElementById("liczba2").value;
+            liczba2 = parseFloat(liczba2);
+            let suma = liczba1 + liczba2;
+            document.getElementById("wynik").innerHTML = suma;
+            wybor = 1;
+        }
+
+        function odejmij()
+        {
+            let liczba1 = document.getElementById("liczba1").value;
+            liczba1 = parseFloat(liczba1);
+            let liczba2 = document.getElementById("liczba2").value;
+            liczba2 = parseFloat(liczba2);
+            let roznica = liczba1 - liczba2;
+            document.getElementById("wynik").innerHTML = roznica;
+            wybor = 2;
+        }
+
+        function pomnoz()
+        {
+            let liczba1 = document.getElementById("liczba1").value;
+            liczba1 = parseFloat(liczba1);
+            let liczba2 = document.getElementById("liczba2").value;
+            liczba2 = parseFloat(liczba2);
+            let iloczyn = liczba1 * liczba2;
+            document.getElementById("wynik").innerHTML = iloczyn;
+            wybor = 3;
+        }
+
+        function podziel()
+        {
+            let liczba1 = document.getElementById("liczba1").value;
+            liczba1 = parseFloat(liczba1);
+            let liczba2 = document.getElementById("liczba2").value;
+            liczba2 = parseFloat(liczba2);
+            if(liczba2 != 0)
+            {
+                let iloraz = liczba1 / liczba2;
+                document.getElementById("wynik").innerHTML = iloraz;
+                wybor = 4;
+            }
+            else
+            {
+                document.getElementById("wynik").innerHTML = "Nie dziel przez zero!"
+            }
+        }
+
+        function ponow()
+        {
+            switch(wybor)
+            {
+                case 1:
+                    dodaj();
+                    break;
+                case 2:
+                    odejmij();
+                    break;
+                case 3:
+                    pomnoz();
+                    break;
+                case 4:
+                    podziel();
+                    break;
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+    <p>liczba1:</p>
+    <input id="liczba1" onkeypress="ponow()">
+    <p>liczba2:</p>
+    <input id="liczba2" onkeypress="ponow()">
+    <p></p>
+    <button onclick="dodaj()">Dodawanie</button>
+    <button onclick="odejmij()">Odejmowanie</button>
+    <button onclick="pomnoz()">Mnozenie</button>
+    <button onclick="podziel()">Dzielenie</button>
+    <p>wynik:</p>
+    <div id="wynik"></div>
+</body>
+
+</html>
