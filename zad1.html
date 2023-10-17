@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script>
+            let tab = [5, 7, 21, 11, 9, 19, 13];
+            function sum()
+            {
+                var suma = 0;
+                for(var i = 0; i < tab.length; i++)
+                {
+                    suma += tab[i];
+                }
+                let placeForSum = document.getElementById("suma");
+                placeForSum.innerHTML = suma;
+            }
+            function min()
+            {
+                var min = tab[0];
+                for(var i = 1; i < tab.length; i++)
+                {
+                    if(tab[i] < min)
+                    {
+                        min = tab[i];
+                    }
+                }
+                let placeForMin = document.getElementById("min");
+                placeForMin.innerHTML = min;
+            }
+            function max()
+            {
+                var max = tab[0];
+                for(var i = 1; i < tab.length; i++)
+                {
+                    if(tab[i] > max)
+                    {
+                        max = tab[i];
+                    }
+                }
+                let placeForMax = document.getElementById("max");
+                placeForMax.innerHTML = max;
+            }
+        </script>
+    </head>
+    <body onload="sum();min();max()">
+        <p id="suma"></p>
+        <p id="min"></p>
+        <p id="max"></p>
+    </body>
+</html>
