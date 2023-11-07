@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table, tr, td, th 
+            {
+                border : 1px solid;
+                text-align: left;
+            }
+        </style>
+        <script>
+            class Osoba
+            {
+                constructor(imie, nazwisko, rokurodzenia)
+                {
+                    this.imie = imie;
+                    this.nazwisko = nazwisko;
+                    this.rokurodzenia = rokurodzenia
+                }
+                wypiszInformacje()
+                {
+                    console.log(this.imie, this.nazwisko, this.rokurodzenia);
+                }
+
+            }
+
+            class Pracownik extends Osoba
+            {
+                constructor(imie, nazwisko, rokurodzenia, pensja, premia)
+                {
+                    super(imie, nazwisko, rokurodzenia);
+                    this.pensja = pensja;
+                    this.premia = premia;
+                }
+
+                wypiszInformacje()
+                {
+                    super.wypiszInformacje();
+                    console.log(this.pensja, this.premia);
+                }
+
+                stworzWiersz()
+                {
+                    let tr = document.createElement("tr");
+                    let td1 = document.createElement("td");
+                    let td2 = document.createElement("td");
+                    let td3 = document.createElement("td");
+                    td1.innerHTML = this.imie + " " + this.nazwisko[0];
+                    tr.appendChild(td1);
+                    td2.innerHTML = this.pensja;
+                    tr.appendChild(td2);
+                    td3.innerHTML = this.premia;
+                    tr.appendChild(td3);
+                    return tr;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <table id="dane">
+            <tr>
+                <th>Imie i pierwsza litera nazwiska</th>
+                <th>Pensja</th>
+                <th>Premia</th>
+            </tr>
+        </table>
+        <script>
+            const os1 = new Osoba("Alojzy", "Ciechocimski", 29);
+            const os2 = new Osoba("Tomasz", "Kominiarski", 27);
+            const os3 = new Osoba("Jarek", "Kowol", 24);
+            os1.wypiszInformacje();
+            os2.wypiszInformacje();
+            os3.wypiszInformacje();
+
+            const pracownik1 = new Pracownik("Adam", "Nowakowski", 34, 4200, 800);
+            const pracownik2 = new Pracownik("Natalia", "Boniarska", 21, 4000, 600);
+            pracownik1.wypiszInformacje();
+            pracownik2.wypiszInformacje();
+
+            document.getElementById("dane").appendChild(pracownik1.stworzWiersz());
+            document.getElementById("dane").appendChild(pracownik2.stworzWiersz());
+        </script>
+    </body>
+</html>
