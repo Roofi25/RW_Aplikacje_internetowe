@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <script>
+
+            function start()
+            {
+                //reset divov
+                document.getElementById("kosci").innerHTML = "";
+                document.getElementById("przyciskDoWymiany").innerHTML = "";
+                document.getElementById("kosciWymienione").innerHTML = "";
+                var ileDoWymiany = 0; //zmienna przechowujaca ile chcemy wymienic kosci
+                let gdzieWyswietlicIlosc = document.getElementById("info"); //gdzie wyswietlamy ile chcemy wymienic kosci
+                gdzieWyswietlicIlosc.innerHTML = "liczba kosci do wymiany: " + ileDoWymiany; //komunikat
+                gdzieWyswietlicIlosc.style.clear = "both"; //zeby schodzilo na dol
+                gdzieWyswietlicIlosc.style.display = "block"; //zeby schodzilo na dol
+                gdzieZapisac = document.getElementById("kosci"); //div w ktorym beda zapisywane wylosowane kosci
+                for(let i = 0; i < 5; i++)
+                {
+                    let div = document.createElement("div");
+                    let liczbaLosowa = 1 + Math.floor(Math.random() * 6); //liczba losowa od 1 do 6
+                    div.innerHTML = liczbaLosowa;
+                    div.style.width = "100px";
+                    div.style.height = "100px";
+                    div.style.margin = "10px";
+                    div.style.float = "left";
+                    div.style.textAlign = "center"; //to oraz lineHeight potrzebne zeby było na środku napisane i wzgledem poziomu i pionu
+                    div.style.lineHeight = "100px"; //100px bo height ma 100px te divy
+                    div.style.borderStyle = "solid"; //dałem border żeby odróżnić
+                    div.onclick = function() //każdy z divov ma funkcje onclick
+                    {
+                        //gdzie jest div nadrzedny(rodzic) z ktorego bedziemy usuwac elementy podrzedne (dzieci)
+                        gdzieUsunac = document.getElementById("kosci");
+                        gdzieUsunac.removeChild(div); //usuwa element podrzedny w divie glownym "kosci"
+                        ileDoWymiany++; //zmienna ileDoWymiany zwieksza sie
+                        gdzieWyswietlicIlosc.innerHTML = "liczba kosci do wymiany: " + ileDoWymiany; //komunikat zostaje zaaktualizowany
+                    }
+                    gdzieZapisac.appendChild(div); //po iteracji petli dolacza diva do glownego diva o nazwie "kosci"
+                }
+                //poza petla tworzymy button ktory ma napis "WYGENERUJ DO WYMIANY", clear:both i display:block zeby się ladnie ustawił.
+                //button jest generowany dopiero po generacji podstawowych kosci oraz komunikatu o ilosci wymienionych kosci
+                //czyli on się stworzy dopiero jak klikniemy button "START"
+                let button = document.createElement("button");
+                button.innerHTML = "WYGENERUJ DO WYMIANY";
+                button.style.clear = "both";
+                button.style.display = "block";
+                button.onclick = function() //button ma funkcje onclick
+                {
+                    //div zawierajacy wymienione kosci jest resetowany, zeby nie dodawalo nowych kosci, tylko najpierw usuwalo stare
+                    document.getElementById("kosciWymienione").innerHTML = "";
+                    let gdzieZapisacWymienione = document.getElementById("kosciWymienione"); //gdzoe beda zapisywane wymienione kosci
+                    for(let i = 0; i < ileDoWymiany; i++) //petla po zmiennej "ileDoWymiany"
+                    {
+                        //to samo co w generacji 5 poczatkowych kosci, z tym że te divy nie mają funkcji, która pozwala wymienić
+                        //dlatego, że wymiana może być tylko jeden raz.
+                        let div = document.createElement("div");
+                        let liczbaLosowa = 1 + Math.floor(Math.random() * 6);
+                        div.innerHTML = liczbaLosowa;
+                        div.style.width = "100px";
+                        div.style.height = "100px";
+                        div.style.margin = "10px";
+                        div.style.float = "left";
+                        div.style.textAlign = "center";
+                        div.style.lineHeight = "100px";
+                        div.style.borderStyle = "solid";
+                        gdzieZapisacWymienione.appendChild(div);
+                    }
+                }
+                //po zbudowaniu przycisku dynamicznie, okreslamy gdzie chcemy ten przycisk dolaczyc
+                //w tym wypadku dolaczamy go do diva o id: "przyciskDoWymiany"
+                let gdzieWygenerowacPrzycisk = document.getElementById("przyciskDoWymiany");
+                gdzieWygenerowacPrzycisk.appendChild(button);
+            }
+
+        </script>
+
+    </head>
+
+    <body>
+        <button onclick="start()"">START</button>
+
+        <div id="kosci"></div>
+
+        <span id="info"></span>
+        
+        
+        <div id="przyciskDoWymiany"></div>
+
+        <div id="kosciWymienione"></div>
+    </body>
+</html>
