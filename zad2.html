@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            #plansza { width: 1080px; height: 520px; border: 1px solid silver; }
+            #plansza rect { stroke: silver; stroke-width: 1px; }
+            #pilka { width: 16px; height: 16px; fill: gray; }
+            .zwykly { fill: navy; }
+            .niezniszczalny { fill: black}
+        </style>
+    </head>
+    <body>
+        <svg id="plansza"></svg>
+        <script>
+        const nssvg = "http://www.w3.org/2000/svg";
+        const plansza = document.getElementById("plansza");
+        const pwidth = 1080; // szerokość okna gry
+        const pheight = 520; // wysokość okna gry
+        const kwidth = 64; // bazowa szerokość klocka
+        const kheight = 32; // bazowa wysokość klocka
+        class Pilka 
+        { // bazowa piłka
+            constructor(x, y, r, p, k) 
+            {
+                this.x = x; // położenie obiektu w poziomie
+                this.y = y; // położenie obiektu w pionie
+                this.r = r; // wielkość piłki
+                this.p = p; // prędkość piłki w poziomie
+                this.k = k; // kąt poruszania się piłki
+                // wygląd obiektu zdefiniowany za pomocą SVG
+                this.ksztalt = document.createElementNS(nssvg, "circle");
+                this.ksztalt.setAttribute("cx", this.x);
+                this.ksztalt.setAttribute("cy", this.y);
+                this.ksztalt.setAttribute("r", this.r);
+            }
+            umiesc() 
+            { // umieszczenie piłki na planszy
+                plansza.appendChild(this.ksztalt);
+            }
+            rusz() 
+            { // przemieszczenie piłki
+                this.x += Math.sin(this.k) * this.p;
+                this.y += Math.cos(this.k) * this.p;
+                if ((this.x - this.r) < 0) this.odwrocPoziom();
+                else if ((this.x + this.r) > pwidth) this.odwrocPoziom();
+                if ((this.y - this.r) < 0) this.odwrocPion();
+                else if ((this.y + this.r) > pheight) this.odwrocPion();
+            }
+            rysuj() 
+            { // narysowanie piłki w nowej pozycji
+                this.ksztalt.setAttribute("cx", this.x);
+                this.ksztalt.setAttribute("cy", this.y);
+            }
+            odwroc(klocek) 
+            { // odwrócenie kierunku ruchu piłki po kolizji
+                if ((this.x > klocek.x) && (this.x < (klocek.x + klocek.w))) 
+                {
+                    this.x -= Math.sin(this.k) * this.p;
+                    this.y -= Math.cos(this.k) * this.p;
+                    this.odwrocPion();
+                } 
+                else 
+                {
+                    this.x -= Math.sin(this.k) * this.p;
+                    this.y -= Math.cos(this.k) * this.p;
+                    this.odwrocPoziom();
+                }
+            }
+            odwrocPion() 
+            {
+                this.k = Math.PI - this.k; 
+            }
+            odwrocPoziom() 
+            {
+                this.k = -this.k; 
+            }
+        }
+        class Bazowy 
+        { // bazowy klocek
+            constructor(x, y, w, h) 
+            {
+                this.x = 28 + x * kwidth; // położenie obiektu w poziomie
+                this.y = y * kheight; // położenie obiektu w pionie
+                this.w = w; // szerokość klocka
+                this.h = h; // wysokość klocka
+                // wygląd obiektu zdefiniowany za pomocą SVG
+                this.ksztalt = document.createElementNS(nssvg, "rect");
+                this.ksztalt.setAttribute("x", this.x);
+                this.ksztalt.setAttribute("y", this.y);
+                this.ksztalt.setAttribute("width", this.w);
+                this.ksztalt.setAttribute("height", this.h);
+            }
+            usun() 
+            { 
+                return true; 
+            } // czy usunąć po zbiciu
+            umiesc() 
+            { // umieszczenie klocka na planszy
+                plansza.appendChild(this.ksztalt);
+            }
+            kolizja(pilka) 
+            { // sprawdzenie kolizji
+            // czy na zewnątrz klocka? (przyśpieszenie obliczeń)
+                if ((pilka.x + pilka.r) < this.x) return false;
+                if ((pilka.x - pilka.r) > (this.x + this.w)) return false;
+                if ((pilka.y + pilka.r) < this.y) return false;
+                if ((pilka.y - pilka.r) > (this.y + this.h)) return false;
+                // czy wewnątrz klocka?
+                if ((pilka.x >= this.x) && (pilka.x <= (this.x + this.w))
+                && (pilka.y >= this.y) && (pilka.y <= (this.y + this.h))) return true;
+            // dokładna kolizja z najbliższymi krawędziami
+                let cx = pilka.x;
+                let cy = pilka.y;
+                if (cx < this.x) cx = this.x;
+                else if (cx > (this.x + this.w)) cx = this.x + this.w;
+                if (cy < this.y) cy = this.y;
+                else if (cy > (this.y + this.h)) cy = this.y + this.h;
+                let dx = pilka.x - cx;
+                let dy = pilka.y - cy;
+                let dist = dx * dx + dy * dy;
+                if (dist < (pilka.r * pilka.r)) 
+                    return true;
+                return false; // brak kolizji
+            }
+        }
+        class Zwykly extends Bazowy 
+        { // zwykły klocek - znika po uderzeniu
+            constructor(x, y) 
+            {
+                super(x, y, kwidth, kheight);
+                this.ksztalt.classList.add("zwykly");
+            }
+        }
+
+        //MOJE ZROBIONE KLASY START
+        class Niezniszczalny extends Bazowy
+        {
+            constructor(x, y)
+            {
+                super(x, y, kwidth, kheight);
+                this.ksztalt.classList.add("niezniszczalny");
+            }
+            usun() 
+            { 
+                return false; 
+            } // czy usunąć po zbiciu (NIE)
+        }
+
+        class Kolorowy extends Bazowy
+        {
+            constructor(x, y)
+            {
+                super(x, y, kwidth, kheight);
+                let r = Math.floor(Math.random() * 255)
+                let g = Math.floor(Math.random() * 255)
+                let b = Math.floor(Math.random() * 255)
+                this.ksztalt.style.fill = "rgb("+r+","+g+","+b+")";
+            }
+        }
+        //MOJE ZROBIONE KLASY KONIEC
+        //POD SPODEM JESZCZE MODYFIKACJA TWORZENIA KLOCKOW
+        let klocki = []; // tablica klocków
+        for (let j = 0; j < 4; j++) 
+        {
+            for (let i = 0; i < 16; i++) 
+            {
+                if(i % 2 != 0) //CO DRUGI JEST NIEZNISZCZALNY (nieparzyste)
+                {
+                    let klocek = new Kolorowy(i, j + 1); // utworzenie klocka
+                    klocki.push(klocek); // dodanie klocka do tablicy
+                    klocek.umiesc(); // umieszczenie klocka na planszy
+                }
+                else //CO DRUGI JEST KOLOROWY (parzyste)
+                {
+                    let klocek = new Niezniszczalny(i, j + 1);
+                    klocki.push(klocek); // dodanie klocka do tablicy
+                    klocek.umiesc(); // umieszczenie klocka na planszy
+                }
+            }
+        }
+        let pilki = []; // tablica piłek - domyślnie jedna piłka
+        let pilka = new Pilka(pwidth / 2, pheight - 64, 16, 5.5, 2.5);
+        pilki.push(pilka); // dodanie piłki do tablicy
+        pilka.umiesc(); // umieszczenie piłki na planszy
+        setInterval(function() 
+        {
+            for (let i = 0; i < pilki.length; i++) 
+            { // aktualizacja piłek
+                pilki[i].rusz(); // oblicz nową pozycję piłki
+                for (let k = 0; k < klocki.length; k++) 
+                { // sprawdź kolizję z klockami
+                    if (klocki[k].kolizja(pilki[i])) 
+                    { // sprawdzenie kolizji
+                        pilki[i].odwroc(klocki[k]); // odwrócenie lotu piłki
+                        if (klocki[k].usun()) 
+                        {
+                            plansza.removeChild(klocki[k].ksztalt); // usunięcie z obrazka
+                            klocki.splice(k, 1); // usunięcie klocka z tablicy
+                        }
+                        break; // koniec sprawdzania kolizji dla tej piłki
+                    }
+                }
+                pilki[i].rysuj(); // narysuj piłkę
+            }
+        }, 10);
+    </script>
+    </body>
+</html>
