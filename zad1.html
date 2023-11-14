@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <script src="js/bootstrap.min.js"></script>
+        <style>
+            .row { height: 200px;}
+            #pierwszy_wiersz { color: #eeeeee; }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row" id="pierwszy_wiersz"> <!-- wiersz 1 - logo i menu -->
+                <div class="col-sm-2">logo</div>
+                <div class="col-sm-10">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab" role="tab"
+                            aria-selected="true">Start</button>
+                       </li>
+                       <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" role="tab">Galeria</button>
+                       </li>
+                       <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" role="tab">Kontakt</button>
+                       </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row"> <!-- wiersz 2 - lewa główna i prawa sekcja -->
+                <div class="col-sm-2">
+                    <button class="btn btn-success btn-lg">Przycisk</button>
+                    <button id="pierwszy" class="btn btn-danger btn-lg">Pierwszy</button>
+                    <button id="drugi" class="btn btn-danger btn-lg">Drugi</button>
+                    <script>
+                    let pierwszy = document.getElementById("pierwszy"); // odnajdujemy obiekt DOM
+                    let przycisk = new bootstrap.Button(pierwszy); // przeksztalcamy na Bootstrap button
+                    przycisk.toggle(); // wywołujemy metodę zmieniającą stan przycisku Bootstrap button
+                    </script>
+                </div>
+                <div class="col-sm-10">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a href="#" class="page-link">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="#" class="page-link">5</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+ <!-- 
+    przyklad1
+    <button class="btn btn-success btn-lg">Przycisk</button>
+
+    przyklad2
+    <body>
+        <button id="pierwszy" class="btn btn-danger btn-lg">Pierwszy</button>
+        <button id="drugi" class="btn btn-danger btn-lg">Drugi</button>
+    <script>
+        let pierwszy = document.getElementById("pierwszy"); // odnajdujemy obiekt DOM
+        let przycisk = new bootstrap.Button(pierwszy); // przeksztalcamy na Bootstrap button
+        przycisk.toggle(); // wywołujemy metodę zmieniającą stan przycisku Bootstrap button
+
+        przyklad3
+        <ul class="nav nav-tabs justify-content-end" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab" role="tab"
+                        aria-selected="true">Start</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" role="tab">Galeria</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" role="tab">Kontakt</button>
+            </li>
+        </ul>
+    
+        przyklad 4
+        <!DOCTYPE html>
+        <html>
+            <head>
+            <meta charset="utf-8">
+                <link href="css/bootstrap.min.css" rel="stylesheet">
+                <script src="js/bootstrap.min.js"></script>
+            <style>
+                div { border: 1px solid gray; }
+                .row { height: 200px; }
+            </style>
+            </head>
+            <body>
+                <div class="container-fluid">
+                    <div class="row">
+                    <div class="col">8 kolumn – nie podano liczby (12 – 4 = 8)</div>
+                    <div class="col-4">4 kolumny</div>
+                    </div>
+                </div>
+            </body>
+        </html>
+        
+przyklad 5
+    <div class="container-fluid">
+<div class="row">  wiersz 1 - logo i menu
+<div class="col-sm-2">logo</div>
+<div class="col-sm-10">menu</div>
+</div>
+<div class="row"> wiersz 2 - lewa główna i prawa sekcja
+<div class="col-sm-2">lewa<br>sekcja</div>
+<div class="col-sm-8">główna</div>
+<div class="col-sm-2">prawa<br>sekcja</div>
+</div>
+</div>
+       
+        
+    </script>
+    </body>
+-->
