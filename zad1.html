@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="p5.min.js"></script>
+    </head>
+    <body>
+    <main></main>
+    <script>
+        function setup() {
+            createCanvas(640, 480, WEBGL);
+            }
+            let kat = 0.0; // obiekt będzie animowany
+            function draw() 
+            {
+                background(200);
+                for (let i = 0; i < 20; i++) { // narysowanie 20 sfer
+                push(); // zapamiętanie transformacji
+                rotate(kat * (i + 1)); // każda sfera będzie obrócona o inny kąt
+                translate(0, 50 + kat * i, 0); // i przesunięta dalej po osi Y
+                scale(kat / 5) // skalowanie przez kat podzielony przez 5. Musi byc to przed rysowaniem
+                sphere(20); // narysowanie sfery
+                pop(); // obrót i przesunięcie zostaną zniwelowane dla kolejnej sfery
+                }
+                kat += 0.01; // zwiększenie kąta obrotu
+            }
+
+    </script>
+</body>
+</html>
