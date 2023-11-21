@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="p5.min.js"></script>
+        <style>
+            main { position: fixed; left: 0; top: 0; z-index: -1; }
+            div div { margin: 100px; padding: 10px; width: 200px; height: 100px; 
+                        border-radius: 10px; background: white; opacity: 0.8; }
+        </style>
+    </head>
+    <body>
+    <main></main>
+    <div>
+        <div>
+            1
+        </div>
+
+        <div>
+            2
+        </div>
+
+        <div>
+            3
+        </div>
+
+        <div>
+            4
+        </div>
+
+        <div>
+            5
+        </div>
+
+        <div>
+            6
+        </div>
+
+        <div>
+            7
+        </div>
+
+        <div>
+            8
+        </div>
+
+        <div>
+            9
+        </div>
+
+        <div>
+            10
+        </div>
+    </div>
+    <script>
+        let rysunek = null;
+        function preload() 
+        { // wczytanie tekstury wewnątrz tej metody
+            rysunek = loadImage("https://cdn.pixabay.com/photo/2016/12/15/20/21/texture-1909992_1280.jpg");
+        }
+        function setup() 
+        {
+            createCanvas(windowWidth, windowHeight, WEBGL); // obszar roboczy na całe okno
+            noStroke();
+        }
+        function windowResized() 
+        {
+            resizeCanvas(windowWidth, windowHeight); // zmiana przy zmianie wielkości okna
+        }
+        let kat = 0.0;
+        function draw() 
+        {
+            background(0, 10, 40); // kolor tła - ciemno niebieski
+            lights(); // włączanie podstawowych świateł
+            rotateY(kat); // obrót obiektu
+            texture(rysunek); // wybranie tekstury na materiał obiektu
+            sphere(100); // narysowanie sfery
+            kat += 0.02;
+            //camera(0, mouseX, 500, 0, 0, 0) //podpunkt nr 4 zad3
+            camera(0, window.scrollY, 500, 0, 0, 0)
+        }
+    </script>
+</body>
+</html>
