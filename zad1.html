@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FLAPPY</title>
+        <script src="p5.min.js" defer></script>
+    </head>
+    <body>
+        <main></main>
+        <script>
+            // stałe
+            const WIDTH = 640 // screen resx
+            const HEIGHT = 480 // screen resy
+            const FLW = 30 // flappy width
+            const FLH = 20 // flappy height
+            const PPW = 30 // pipe radious
+            const ZSP = -100 // z-bufor offset
+
+
+            //zmienna na punkty
+            let punkty = 0; //punkty
+            let czy_byla_kolizja = false; //flaga czy byla kolizja
+
+            // flappy class
+            class Flappy 
+            {
+                // flappy constructor
+                constructor() 
+                {
+                    this.x = -WIDTH / 2 // x position
+                    this.y = -HEIGHT / 4 // y position
+                    this.a = 0.0 // acceleration
+                    this.v = 0.0 // velocity
+                    this.j = 0.0 // jump power
+                }
+                // uaktualnienie pozycji
+                process() 
+                {
+                    this.a = 0.10 // acceleration
+                    this.v += this.a - this.j // velocity
+                    this.y += this.v // position
+                    if (this.v > 13.0) this.v = 13.0 // max down speed
+                    if (this.v < -13.0) this.v = -13.0 // max up speed
+                    if (this.j > 0.0) this.j -= 0.4 // jump power decrease
+                }
+                // ustawienie siły skoku
+                jump() 
+                {
+                    this.j = 3.0
+                    this.v /= 2.0
+                }
+                // sprawdzenie kolizji
+                collision(pipe) 
+                {
+                    // brak kolizji po x
+                    if (Math.abs(this.x - pipe.x) > (FLW + PPW)) 
+                    {
+                        return false
+                    }
+                   // kolizja po y
+                    let pipes = 2 * pipe.y - pipe.h
+                    let pipee = 2 * pipe.y + pipe.h
+                    if ((this.y > pipes) && (this.y < pipee)) 
+                    {
+                        //flaga na true czyli byla kolizja 
+                        //czyli w czyPoza() nie dodajemy punktu gdy pipe przejdzie na lewo
+                        czy_byla_kolizja = true;
+                        punkty = 0; //zerujemy punkty w przypadku kolizji
+                        return true
+                    }
+                    // brak kolizji po y
+                    return false
+                }
+                // narysowanie obiektu
+                draw() 
+                {
+                    push()
+                    normalMaterial()
+                    scale(1.0, 0.5, 1.0)
+                    translate(this.x, this.y, ZSP)
+                    rotateX(frameCount * 0.1)
+                    cylinder(FLW, FLH)
+                    pop()
+                }
+            }
+
+            //pipe class
+            class Pipe 
+            {
+                // pipe constructor
+                constructor(start, end, x) 
+                {
+                    this.end = end;
+                    this.start = start;
+                    this.x = x
+                    this.h = (end - start) * HEIGHT * 1.5
+                    this.y = -HEIGHT * 1.5 / 2 + start * HEIGHT * 1.5 + this.h / 2
+                }
+                // uaktualnienie pozycji (MOJE ZROBIONE)
+                process() 
+                {
+                    this.x -= 2; //zmniejszanie pozycji wzgledem x o 2
+                }
+                czy_poza()
+                {
+                    if(this.x < -WIDTH/2 - 120)
+                    {
+                        if(czy_byla_kolizja == false) //jezeli flaga jest false czyli nie bylo kolizji to dodajemy punkt
+                        {
+                            punkty += 1;
+                        }
+                        document.getElementById("punkty").innerHTML = punkty; //aktualizujemy div 'punkty'
+                        czy_byla_kolizja = false; //zmieniamy na false (jezeli bylo true i byla kolizja to nie dodaje punktu gdy pipe zniknie)
+                        return true;
+                    }
+                    return false;
+                }
+                // narysowanie obiektu
+                draw() 
+                {
+                    push()
+                    noStroke()
+                    ambientMaterial(10, 230, 50)
+                    translate(this.x, this.y, ZSP)
+                    cylinder(PPW, this.h)
+                    pop()
+                }
+            }
+            // zmienne globalne (rysowane obiekty)
+            let flappy = new Flappy()
+            let pipe1 = new Pipe(0.00, Math.random()*0.6, WIDTH / 2)
+            let pipe2 = new Pipe(pipe1.end + 0.4, 1.00, WIDTH / 2)
+            console.log(pipe1);
+            console.log(pipe2);
+            // p5.js setup
+            function setup() 
+            {
+                createCanvas(WIDTH, HEIGHT, WEBGL)
+            }
+            // funkcja rysująca
+            function draw() 
+            {
+                // tło i światła
+                background(190, 210, 230)
+                ambientLight(60, 60, 60)
+                pointLight(255, 255, 255, 0, 0, 100)
+                // sprawdzenie kolizji
+                if (flappy.collision(pipe1) || flappy.collision(pipe2)) 
+                {
+                    background(80, 0, 0)
+                }
+                // elementy gry
+                flappy.process()
+                flappy.draw()
+                pipe1.process()
+                pipe1.draw()
+                pipe2.process()
+                pipe2.draw()
+                //czy jest poza ekranem pipe i zmiana(MOJE ZROBIONE)
+                if(pipe1.czy_poza() == true || pipe2.czy_poza() == true)
+                {
+                    pipe1 = new Pipe(0.00, Math.random() * 0.6, WIDTH / 2);
+                    pipe2 = new Pipe(pipe1.end + 0.4, 1.00, WIDTH / 2);
+                    //pipe1 = new Pipe(0.00, 0.40, WIDTH/2); //po pierwszym narysowaniu rur, kazda nastepna ma te same wartosci
+                    //pipe2 = new Pipe(0.60, 1.00, WIDTH/2); //wiec zmienilem to zeby tez sie losowaly
+                }
+            }
+            // key press event
+            function keyPressed() 
+            {
+                flappy.jump()
+            }
+            // mouse click event
+            function mouseClicked() 
+            {
+                flappy.jump()
+            }
+
+        </script>
+        <p>Liczba twoich punktow to:</p>
+        <div id="punkty">0</div>
+    </body>
+</html>
