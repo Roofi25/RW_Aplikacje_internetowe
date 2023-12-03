@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"><script src="chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    </head>
+    <body>
+        <div style="width: 600px; height: 400px;">
+            <canvas id="wykres" width="600" height="400"></canvas>
+        </div>
+        <script>
+            const dane = 
+            {
+            datasets: [ 
+                {
+                    label: "punkty",
+                    data: [
+                    { x: 0, y: 0 },
+                    { x: 1, y: 0 },
+                    { x: 1, y: 1 }
+                    ],
+                    backgroundColor: "violet",
+                    pointRadius: 10,
+                    showLine: true,
+                    borderColor: "blue"
+                } ]
+            }   
+            const ctx = document.getElementById("wykres").getContext("2d");
+            const wykres = new Chart(ctx, { type: "scatter", data: dane });
+            function dodajPunkt()
+            {
+                const newx = document.getElementById("x").value;
+                const newy = document.getElementById("y").value;
+                wykres.data.datasets[0].data.push( { x: newx, y: newy })
+                wykres.update();
+            }
+            function usunPunkt()
+            {
+                wykres.data.datasets[0].data.shift();
+                wykres.update();
+            }
+        </script>
+        <label for="x">X:</label>
+        <input type="number" id="x">
+        <label for="y">Y:</label>
+        <input type="number" id="y">
+        <button type="button" onclick="dodajPunkt()">Dodaj</button>
+        <button type="button" onclick="usunPunkt()">Usun</button>
+    </body>
+</html>
