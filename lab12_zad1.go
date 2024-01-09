@@ -28,14 +28,14 @@ func pageLosuj(w http.ResponseWriter, r *http.Request) {
 		liczbyLosowe = append(liczbyLosowe, liczbaLosowa)
 	}
 
-	fmt.Fprintf(w, "<html><body>%v liczb losowych z zakresu od 0 do %v: %v", a, b, liczbyLosowe)
+	fmt.Fprintf(w, "<html><body>%v liczb losowych z zakresu od 0 do %v: %v</body></html>", a, b, liczbyLosowe)
 }
 
 func main() {
 	r := mux.NewRouter()
-	//http://localhost:10000/page/mode/33
+	//     http://localhost:10000/page/mode/33
 	r.HandleFunc("/page/{mode}/{id:[0-9]+}", pageFunc)
-	//http://localhost:10000/losuj/10/50
+	//     http://localhost:10000/losuj/10/50
 	r.HandleFunc("/losuj/{a:[0-9]+}/{b:[0-9]+}", pageLosuj)
 	http.ListenAndServe(":10000", r)
 }
